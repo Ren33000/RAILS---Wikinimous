@@ -1,15 +1,25 @@
-require 'faker'
+#require 'faker'
 
-puts "Cleaning database..."
-Article.destroy_all #clean up the seed each time we delete records in DB
+Article.destroy_all
 
-puts "Creating data..."
-10.times do
-  Article.create(
-    title: Faker::Kpop.iii_groups
-	content: Faker::Quote.famous_last_words
-)
+def fake_content
+  paragraphs = []
+  paragraphs << Faker::Lorem.paragraph
+  paragraphs << "![](http://lorempixel.com/800/300/city/)"
+  paragraphs << "## #{Faker::Company.catch_phrase}"
+  paragraphs << Faker::Lorem.paragraphs(2)
+  paragraphs << "**#{Faker::Lorem.word}** #{Faker::Lorem.sentences.join}"
+  paragraphs << "## #{Faker::Company.catch_phrase}"
+  paragraphs << "#{Faker::Lorem.sentences.join} [#{Faker::Commerce.product_name}](#{Faker::Internet.url}) #{Faker::Lorem.sentences.join}"
+  paragraphs << Faker::Lorem.paragraphs(3)
+  paragraphs.flatten.join("\n\n")
 end
-puts "Finished!"
+
+20.times do
+  Article.create(
+    title: Faker::Company.catch_phrase,
+    content: fake_content
+  )
+end
 
 
